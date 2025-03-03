@@ -1,6 +1,7 @@
 <?php
+
 // Include the database connection file
-include '../includes/config.php';
+include('../includes/config.php');
 
 // Initialize variables
 $username = "";
@@ -45,13 +46,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 mkdir($upload_dir, 0777, true);
             }
 
-            // Get the temporary file path
-            $tmp_name = $_FILES['profile_picture']['tmp_name'];
-            $target_file = $upload_dir . basename($profile_picture['name']);
+            // Generate a unique filename to prevent overwriting
+            $file_extension = pathinfo($profile_picture['name'], PATHINFO_EXTENSION);
+            $unique_filename = time() . "_" . uniqid() . "." . $file_extension;
+            $target_file = $upload_dir . $unique_filename;
 
             // Check if file is a valid image
-            if (getimagesize($tmp_name)) {
-                if (move_uploaded_file($tmp_name, $target_file)) {
+            if (getimagesize($profile_picture['tmp_name'])) {
+                if (move_uploaded_file($profile_picture['tmp_name'], $target_file)) {
                     // Hash the password before storing
                     $hashed_password = password_hash($userpassword, PASSWORD_DEFAULT);
 
@@ -61,12 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $stmt->bind_param("sssss", $username, $userphoneNumber, $useremail, $hashed_password, $target_file);
 
                     if ($stmt->execute()) {
-                        // Optionally log the user in after registration
+                        // Start session and store user info
                         session_start();
-                        $_SESSION['user_id'] = $stmt->insert_id; // Store the user ID from the newly inserted record
+                        $_SESSION['user_id'] = $stmt->insert_id; // Store user ID from the newly inserted record
                         $_SESSION['user_email'] = $useremail;
 
-                        $success_msg = "Registration successful! You can now log in.";
+                        // Redirect after successful registration
                         header("Location: login.php");
                         exit();
                     } else {
@@ -129,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </form>
                     </div>
                     <div class="card-footer text-center">
-                        <p>Already have an account? <a href="login.php">Login</a></p>
+                        <p>Already have an account? <a href="/user/login.php">Login</a></p>
                     </div>
                 </div>
             </div>

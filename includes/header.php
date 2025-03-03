@@ -1,6 +1,7 @@
 <?php
 session_start(); // Start session to check login status
-include 'config.php';
+include __DIR__ . '/../includes/config.php';
+define('BASE_URL', 'http://localhost:8080/TourManagement/');
 ?>
 
 <!DOCTYPE html>
@@ -25,23 +26,23 @@ include 'config.php';
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="index.php">Tour Travel</a>
+        <a class="navbar-brand" href="<?php echo BASE_URL; ?>index.php">Tour Travel</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="../../Travel_tour_Management/index.php">Home</a>
+                    <a class="nav-link" href="<?php echo BASE_URL; ?>index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../../Travel_tour_Management/pages/tours.php">Tours</a>
+                    <a class="nav-link" href="<?php echo BASE_URL; ?>pages/tours.php">Tours</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../../Travel_tour_Management/pages/about.php">About Us</a>
+                    <a class="nav-link" href="<?php echo BASE_URL; ?>pages/about.php">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../../Travel_tour_Management/pages/contact.php">Contact</a>
+                    <a class="nav-link" href="<?php echo BASE_URL; ?>pages/contact.php">Contact</a>
                 </li>
                 
                 <?php
@@ -54,22 +55,24 @@ include 'config.php';
                     $stmt->execute();
                     $result = $stmt->get_result();
                     $row = $result->fetch_assoc();
-                    // Check if the user has a profile picture, otherwise use default
-                    
-                    // Account, Profile and Logout links
+                    $stmt->close();
+
+                    // Set profile picture
+                    $profile_picture = !empty($row['profile_picture']) ? $row['profile_picture'] : 'default-avatar.png';
+
                     echo "<li class='nav-item'>
-                            <a class='nav-link' href='../../Travel_tour_Management/pages/account.php'>Account</a>
+                            <a class='nav-link' href='" . BASE_URL . "pages/account.php'>Account</a>
                           </li>";
                     echo "<li class='nav-item'>
-                            <a class='nav-link' href='../../Travel_tour_Management/user/confirm_logout.php'>Logout</a>
+                            <a class='nav-link' href='" . BASE_URL . "user/confirm_logout.php'>Logout</a>
                           </li>";
                 } else {
                     // User is not logged in, show login and register links
                     echo "<li class='nav-item'>
-                            <a class='nav-link' href='../../Travel_tour_Management/user/login.php'>Login</a>
+                            <a class='nav-link' href='" . BASE_URL . "user/login.php'>Login</a>
                           </li>";
                     echo "<li class='nav-item'>
-                            <a class='nav-link' href='../../Travel_tour_Management/user/register.php'>Register</a>
+                            <a class='nav-link' href='" . BASE_URL . "user/register.php'>Register</a>
                           </li>";
                 }
                 ?>

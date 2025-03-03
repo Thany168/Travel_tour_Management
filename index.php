@@ -1,6 +1,6 @@
 <?php
-include './includes/config.php';
-include './includes/header.php';
+include 'includes/config.php';
+include 'includes/header.php';
 ?>
 
 <!-- Hero Section with Animated Slider -->
@@ -267,4 +267,4 @@ function toggleItems() {
     <a href="tours.php" class="btn btn-light btn-lg">Browse Tours</a>
 </div>
 
-<?php include '../Travel_tour_Management/includes/footer.php'; ?> 
+<?php include './includes/footer.php'; ?> 
